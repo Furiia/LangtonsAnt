@@ -7,3 +7,5 @@ class MyRect:
         self.width = width
         self.height = height
         self.rect = Rect(left, top, width, height)
+        self.state = -1
+        self.color = (255, 255, 255)

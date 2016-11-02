@@ -1,5 +1,6 @@
 import pygame
 from pyg.object import MyRect
+from langton.langton import LangtonAntsStructure
 
 
 class Window:
@@ -13,6 +14,7 @@ class Window:
         self.start_top = 0
         self.line_points = []
         self.generate_lines()
+        self.langton = LangtonAntsStructure(resolution)
 
     def main_loop(self):
         running = True
@@ -24,14 +26,20 @@ class Window:
                 if event.type == pygame.QUIT:
                     running = False
 
-    def draw_rect(self, rect: MyRect):
-        pygame.draw.rect(self.screen, (255, 0, 0), rect.rect)
-
     def draw_scene(self):
         self.screen.fill(self.background_color)
-        self.draw_rect(MyRect(self.start_left, self.start_top, 10, 10))
+        self.draw_rects()
         self.iterate_positions()
         self.draw_lines()
+
+
+    def draw_rects(self):
+        for i in range(0, self.resolution[0]//10):
+            for j in range(0, self.resolution[1]//10):
+                self.draw_rect(self.langton.square_map[(i, j)])
+
+    def draw_rect(self, rect: MyRect):
+        pygame.draw.rect(self.screen, rect.color, rect.rect)
 
     def generate_lines(self):
         self.generate_vertical_lines()
