@@ -17,14 +17,24 @@ class Window:
         self.langton = LangtonAntsStructure(resolution)
 
     def main_loop(self):
-        running = True
-        while running:
+        event_map = dict()
+        event_map['running'] = True
+        event_map['space_pressed'] = False
+        while event_map['running']:
+            self.event_loop(event_map)
+            if event_map['space_pressed']:
+                continue
             self.clock.tick(150)
             self.draw_scene()
             pygame.display.flip()
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    running = False
+
+    def event_loop(self, event_map):
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                event_map['running'] = False
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_SPACE:
+                    event_map['space_pressed'] = not event_map['space_pressed']
 
     def draw_scene(self):
         self.screen.fill(self.background_color)
